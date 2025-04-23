@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhorias para Sistema de Contagem de Cachos de Uva</title>
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --secondary: #27ae60;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --accent: #e74c3c;
+            --grape-light: #9b59b6;
+            --grape-dark: #8e44ad;
+            --leaf: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--grape-dark), var(--grape-light));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .grape-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            background: url('/api/placeholder/1000/600') center/cover;
+            animation: zoomIn 20s infinite alternate;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out 0.5s both;
+        }
+        
+        .intro p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .improvements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .improvement-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .improvement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(to right, var(--grape-dark), var(--grape-light));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-header h3 {
+            position: relative;
+            z-index: 1;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-body ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+        
+        .card-body li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+            line-height: 1.4;
+        }
+        
+        .card-body li:before {
+            content: "🍇";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .target-section {
+            background: linear-gradient(135deg, var(--dark), #34495e);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin: 3rem -2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .target-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .target-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background: url('/api/placeholder/1000/500') center/cover;
+        }
+        
+        .target-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            animation: pulseText 3s infinite;
+        }
+        
+        .target-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .target-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 0.8rem 1.5rem;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .target-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        
+        .differentials {
+            padding: 3rem 0;
+        }
+        
+        .differentials h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+        
+        .differential-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: fadeInLeft 0.6s ease-out forwards;
+        }
+        
+        .differential-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .differential-icon {
+            font-size: 2rem;
+            margin-right: 1.5rem;
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        .differential-content {
+            flex: 1;
+        }
+        
+        .differential-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .differential-content p {
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--secondary), var(--leaf));
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin: 2rem -2rem -2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/api/placeholder/1000/400') center/cover;
+            opacity: 0.1;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--secondary);
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .cta-button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        
+        .cta-button:hover::after {
+            left: 100%;
+        }
+        
+        .grape-animation {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            z-index: 100;
+            cursor: pointer;
+        }
+        
+        .grape-cluster {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-origin: top center;
+            animation: swing 3s ease-in-out infinite;
+        }
+        
+        .grape {
+            position: absolute;
+            background: var(--grape-dark);
+            border-radius: 50%;
+            box-shadow: inset -3px -3px 10px rgba(0,0,0,0.3), inset 3px 3px 10px rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .grape:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 40px;
+        }
+        
+        .grape:nth-child(2) {
+            width: 35px;
+            height: 35px;
+            top: 30px;
+            left: 15px;
+        }
+        
+        .grape:nth-child(3) {
+            width: 38px;
+            height: 38px;
+            top: 30px;
+            left: 65px;
+        }
+        
+        .grape:nth-child(4) {
+            width: 32px;
+            height: 32px;
+            top: 60px;
+            left: 30px;
+        }
+        
+        .grape:nth-child(5) {
+            width: 36px;
+            height: 36px;
+            top: 60px;
+            left: 55px;
+        }
+        
+        .grape:nth-child(6) {
+            width: 30px;
+            height: 30px;
+            top: 85px;
+            left: 45px;
+        }
+        
+        .stem {
+            position: absolute;
+            width: 8px;
+            height: 35px;
+            background: var(--leaf);
+            top: -15px;
+            left: 56px;
+            border-radius: 4px;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--leaf);
+            top: -5px;
+            left: 65px;
+            border-radius: 0 15px 0 15px;
+            transform: rotate(45deg);
+            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.2);
+            animation: leafWobble 4s ease-in-out infinite;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes zoomIn {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes pulseText {
+            0% {
+                text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255,255,255,0.4);
+            }
+            100% {
+                text-shadow: 0 0 10px rgba(255,255,255,0.1);
+            }
+        }
+        
+        @keyframes swing {
+            0% {
+                transform: rotate(5deg);
+            }
+            50% {
+                transform: rotate(-5deg);
+            }
+            100% {
+                transform: rotate(5deg);
+            }
+        }
+        
+        @keyframes leafWobble {
+            0% {
+                transform: rotate(45deg) scale(1);
+            }
+            50% {
+                transform: rotate(35deg) scale(1.05);
+            }
+            100% {
+                transform: rotate(45deg) scale(1);
+            }
+        }
+        
+        .innovation-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1;
+            transform: rotate(10deg);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+            opacity: 0.7;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        #scrollProgress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 5px;
+            background: linear-gradient(to right, var(--grape-dark), var(--grape-light));
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+        
+        .stats-counter {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        #rainEffect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .differential-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .differential-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .target-section h2, .differentials h2, .cta-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollProgress"></div>
+    <canvas id="rainEffect"></canvas>
+    
+    <header>
+        <div class="grape-bg"></div>
+        <div class="header-content">
+            <h1>Sistema Avançado de Contagem de Cachos de Uva</h1>
+            <p class="subtitle">Inovações e melhorias para transformar a vitivinicultura de precisão</p>
+        </div>
+        <div class="scroll-indicator">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <section class="intro">
+            <h2>Expandindo os Horizontes da Viticultura de Precisão</h2>
+            <p>Nosso sistema de contagem de cachos de uva com OpenCV vai além da simples quantificação, integrando recursos avançados para uma solução completa de gestão da produção vinícola. Conheça as inovações que tornam este sistema uma ferramenta indispensável para o produtor moderno.</p>
+        </section>
+        
+        <div class="stats-counter">
+            <div class="stat-item">
+                <div class="stat-value" id="countAccuracy">97</div>
+                <div class="stat-label">% de Precisão na Contagem</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="countTime">80</div>
+                <div class="stat-label">% Menos Tempo na Colheita</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="countROI">35</div>
+                <div class="stat-label">% Aumento no ROI</div>
+            </div>
+        </div>
+        
+        <section class="improvements">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Melhorias Propostas</h2>
+            <div class="improvements-grid">
+                <div class="improvement-card" style="animation-delay: 0.1s;">
+                    <div class="card-header">
+                        <h3>Georreferenciamento e Mapeamento</h3>
+                        <div class="innovation-badge">Inovação</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Marcação do local exato de cada contagem via GPS</li>
+                            <li>Geração de mapas de densidade de uvas na plantação</li>
+                            <li>Visualização em tempo real das áreas mais produtivas</li>
+                            <li>Integração com sistemas GIS para agricultura</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.2s;">
+                    <div class="card-header">
+                        <h3>Histórico e Análise Temporal</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Acompanhamento da produção ao longo do tempo</li>
+                            <li>Comparativo entre diferentes safras ou áreas</li>
+                            <li>Previsão de produção baseada em séries históricas</li>
+                            <li>Alertas de variações significativas na produtividade</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.3s;">
+                    <div class="card-header">
+                        <h3>Análise de Qualidade</h3>
+                        <div class="innovation-badge">Exclusivo</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Verificação visual do estado das uvas (coloração, tamanho)</li>
+                            <li>Alerta para uvas verdes, murchas ou doentes</li>
+                            <li>Estimativa de açúcar (Brix) baseada em análise visual</li>
+                            <li>Detecção precoce de doenças e pragas</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.4s;">
+                    <div class="card-header">
+                        <h3>Controle de Equipamentos</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Conexão e controle direto de drones</li>
+                            <li>Rota automatizada de escaneamento da plantação</li>
+                            <li>Streaming ao vivo em pontos estratégicos</li>
+                            <li>Integração com sistemas de irrigação automatizada</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.5s;">
+                    <div class="card-header">
+                        <h3>Modo Offline com Sincronização</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Funciona mesmo sem internet</li>
+                            <li>Sincronização automática quando online</li>
+                            <li>Armazenamento local seguro e eficiente</li>
+                            <li>Priorização inteligente de dados na sincronização</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.6s;">
+                    <div class="card-header">
+                        <h3>Exportação de Relatórios</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Geração de relatórios em PDF e Excel</li>
+                            <li>Integração com ERPs agrícolas</li>
+                            <li>Dashboards interativos personalizáveis</li>
+                            <li>Compartilhamento seguro via nuvem</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.7s;">
+                    <div class="card-header">
+                        <h3>Multiusuário e Permissões</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Diferentes níveis de acesso por perfil</li>
+                            <li>Controle granular de permissões</li>
+                            <li>Rastreabilidade de ações por usuário</li>
+                            <li>Autenticação multi-fator para segurança</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.8s;">
+                    <div class="card-header">
+                        <h3>Aprendizado Contínuo</h3>
+                        <div class="innovation-badge">Novo</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>A IA melhora com cada uso (machine learning)</li>
+                            <li>Adaptação a diferentes variedades de uva</li>
+                            <li>Reconhecimento de padrões sazonais</li>
+                            <li>Integração de feedback do usuário para refinamento</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="improvement-card" style="animation-delay: 0.9s;">
+                    <div class="card-header">
+                        <h3>Previsão de Colheita</h3>
+                        <div class="innovation-badge">Exclusivo</div>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Estimativa precisa da data ideal de colheita</li>
+                            <li>Cálculo da mão de obra necessária</li>
+                            <li>Otimização logística baseada em produtividade</li>
+                            <li>Integração com previsão meteorológica</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="target-section">
+            <div class="target-bg"></div>
+            <div class="target-content">
+                <h2>Quem se Beneficia?</h2>
+                <p>Nosso sistema foi desenvolvido pensando nas necessidades específicas de todos os agentes da cadeia produtiva da viticultura.</p>
+                
+                <div class="target-list">
+                    <div class="target-item">Produtores de uva (pequeno a grande porte)</div>
+                    <div class="target-item">Vinícolas</div>
+                    <div class="target-item">Cooperativas agrícolas</div>
+                    <div class="target-item">Pesquisadores em agricultura de precisão</div>
+                    <div class="target-item">Empresas de consultoria agrícola</div>
+                    <div class="target-item">Associações de produtores</div>
+                    <div class="target-item">Instituições de ensino agrícola</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="differentials">
+            <h2>Diferenciais do Sistema</h2>
+            
+            <div class="differential-item" style="animation-delay: 0.1s;">
+                <div class="differential-icon">🔄</div>
+                <div class="differential-content">
+                    <h3>Multidispositivo Real</h3>
+                    <p>Não é apenas um aplicativo — é uma plataforma conectada que funciona perfeitamente em smartphones, tablets, notebooks e estações de trabalho, mantendo a sincronização em tempo real.</p>
+                </div>
+            </div>
+            
+            <div class="differential-item" style="animation-delay: 0.2s;">
+                <div class="differential-icon">📡</div>
+                <div class="differential-content">
+                    <h3>Integração com IoT Agrícola</h3>
+                    <p>Conexão com sensores de umidade, temperatura, luminosidade e nutrientes do solo, correlacionando dados ambientais com a produtividade para análises avançadas.</p>
+                </div>
+            </div>
+            
+            <div class="differential-item" style="animation-delay: 0.3s;">
+                <div class="differential-icon">📊</div>
+                <div class="differential-content">
+                    <h3>Flexível e Escalável</h3>
+                    <p>Do pequeno produtor ao grande exportador, o sistema se adapta às necessidades específicas de cada operação, crescendo junto com o seu negócio.</p>
+                </div>
+            </div>
+            
+            <div class="differential-item" style="animation-delay: 0.4s;">
+                <div class="differential-icon">🧠</div>
+                <div class="differential-content">
+                    <h3>IA Especializada por Variedade</h3>
+                    <p>Algoritmos treinados especificamente para diferentes tipos de uva, reconhecendo as particularidades de cada variedade para maximizar a precisão da contagem e análise.</p>
+                </div>
+            </div>
+            
+            <div class="differential-item" style="animation-delay: 0.5s;">
+                <div class="differential-icon">💬</div>
+                <div class="differential-content">
+                    <h3>Assistente Virtual Agrícola</h3>
+                    <p>Recomendações personalizadas baseadas nas análises (irrigação, colheita, tratamento de pragas) com assistente de voz para consultas rápidas durante o trabalho no campo.</p>
+                </div>
+            </div>
+            
+            <div class="differential-item" style="animation-delay: 0.6s;">
+                <div class="differential-icon">🔒</div>
+                <div class="differential-content">
+                    <h3>Segurança de Dados Avançada</h3>
+                    <p>Proteção total das informações do produtor com criptografia de ponta a ponta, backups automatizados e conformidade com regulamentações de proteção de dados agrícolas.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="cta-section">
+            <div class="cta-bg"></div>
+            <div class="cta-content">
+                <h2>Transforme sua Produção Vinícola</h2>
+                <p>Maximize o rendimento da sua plantação com uma solução tecnológica avançada e projetada especificamente para a viticultura. Entre em contato para uma demonstração personalizada!</p>
+                <a href="#" class="cta-button">Solicitar Demonstração</a>
+            </div>
+        </section>
+    </div>
+    
+    <div class="grape-animation">
+        <div class="grape-cluster">
+            <div class="stem"></div>
+            <div class="leaf"></div>
+            <div class="grape"></div>
+            <div class="grape"></div>
+            <div class="grape"></div>
+            <div class="grape"></div>
+            <div class="grape"></div>
+            <div class="grape"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        });
+        
+        // Animation for stats counter
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Start animation when element is in viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue(document.getElementById("countAccuracy"), 0, 97, 2000);
+                    animateValue(document.getElementById("countTime"), 0, 80, 2000);
+                    animateValue(document.getElementById("countROI"), 0, 35, 2000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(document.querySelector('.stats-counter'));
+        
+        // Grape rain effect
+        const grapeCluster = document.querySelector('.grape-animation');
+        grapeCluster.addEventListener('click', function() {
+            triggerGrapeRain();
+        });
+        
+        function triggerGrapeRain() {
+            const canvas = document.getElementById('rainEffect');
+            canvas.style.display = 'block';
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            let grapes = [];
+            const colors = ['#8e44ad', '#9b59b6', '#a569bd', '#712b8f', '#5c1a73'];
+            
+            for (let i = 0; i < 100; i++) {
+                grapes.push({
+                    x: Math.random() * canvas.width,
+                    y: -20 - Math.random() * 100,
+                    size: 10 + Math.random() * 20,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: 2 + Math.random() * 5,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: -2 + Math.random() * 4
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                let active = false;
+                
+                grapes.forEach(grape => {
+                    grape.y += grape.speed;
+                    grape.rotation += grape.rotationSpeed;
+                    
+                    ctx.save();
+                    ctx.translate(grape.x, grape.y);
+                    ctx.rotate(grape.rotation * Math.PI / 180);
+                    
+                    // Draw grape
+                    ctx.beginPath();
+                    ctx.arc(0, 0, grape.size, 0, Math.PI * 2);
+                    ctx.fillStyle = grape.color;
+                    ctx.fill();
+                    
+                    // Add highlight
+                    ctx.beginPath();
+                    ctx.arc(-grape.size/3, -grape.size/3, grape.size/3, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.fill();
+                    
+                    ctx.restore();
+                    
+                    if (grape.y < canvas.height + 50) {
+                        active = true;
+                    }
+                });
+                
+                if (active) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.style.display = 'none';
+                }
+            }
+            
+            animate();
+        }
+        
+        // Intersection Observer for card animations
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        document.querySelectorAll('.improvement-card').forEach(card => {
+            cardObserver.observe(card);
+        });
+        
+        document.querySelectorAll('.differential-item').forEach(item => {
+            cardObserver.observe(item);
+        });
+    </script>
+</body>
+</html>
