@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melhorias para Sistema de Contagem de Cachos de Uva</title>
+    <title>PharmaTrackAI | Rastreamento Inteligente de Medicamentos</title>
     <style>
         :root {
-            --primary: #8e44ad;
-            --secondary: #27ae60;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --accent: #e74c3c;
-            --grape-light: #9b59b6;
-            --grape-dark: #8e44ad;
-            --leaf: #2ecc71;
+            --primary: #0066CC;
+            --secondary: #00A3E0;
+            --accent: #00CC99;
+            --dark: #003366;
+            --light: #F0F8FF;
+            --white: #FFFFFF;
+            --gray: #F0F0F0;
+            --danger: #FF5252;
+            --warning: #FFC107;
+            --success: #4CAF50;
         }
         
         * {
@@ -24,1001 +26,1455 @@
         }
         
         body {
-            background-color: var(--light);
-            color: var(--dark);
+            background-color: #f8f9fa;
+            color: #333;
             overflow-x: hidden;
         }
         
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
         header {
-            background: linear-gradient(135deg, var(--grape-dark), var(--grape-light));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 5px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
         
         .header-content {
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInDown 1s ease-out;
-        }
-        
-        .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-        
-        .grape-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.15;
-            background: url('/api/placeholder/1000/600') center/cover;
-            animation: zoomIn 20s infinite alternate;
-        }
-        
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        .intro {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-        
-        .intro p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-        
-        .improvements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .improvement-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        
-        .improvement-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        
-        .card-header {
-            background: linear-gradient(to right, var(--grape-dark), var(--grape-light));
-            color: white;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card-header h3 {
-            position: relative;
-            z-index: 1;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .card-body {
-            padding: 1.5rem;
-        }
-        
-        .card-body ul {
-            list-style-type: none;
-            margin-left: 0;
-        }
-        
-        .card-body li {
-            margin-bottom: 0.8rem;
-            position: relative;
-            padding-left: 1.5rem;
-            line-height: 1.4;
-        }
-        
-        .card-body li:before {
-            content: "🍇";
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-        
-        .target-section {
-            background: linear-gradient(135deg, var(--dark), #34495e);
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-            margin: 3rem -2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .target-content {
-            position: relative;
-            z-index: 2;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .target-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.05;
-            background: url('/api/placeholder/1000/500') center/cover;
-        }
-        
-        .target-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            animation: pulseText 3s infinite;
-        }
-        
-        .target-list {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 2rem;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
         }
         
-        .target-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 50px;
-            padding: 0.8rem 1.5rem;
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-        }
-        
-        .target-item:hover {
-            background: rgba(255,255,255,0.2);
-            transform: scale(1.05);
-        }
-        
-        .differentials {
-            padding: 3rem 0;
-        }
-        
-        .differentials h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--dark);
-        }
-        
-        .differential-item {
+        .logo {
             display: flex;
             align-items: center;
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            transform: translateX(-30px);
-            animation: fadeInLeft 0.6s ease-out forwards;
         }
         
-        .differential-item:hover {
-            transform: translateY(-5px);
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
         }
         
-        .differential-icon {
-            font-size: 2rem;
-            margin-right: 1.5rem;
-            color: var(--primary);
-            animation: pulse 2s infinite;
-        }
-        
-        .differential-content {
-            flex: 1;
-        }
-        
-        .differential-content h3 {
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-        
-        .differential-content p {
-            color: #555;
-            line-height: 1.4;
-        }
-        
-        .cta-section {
-            background: linear-gradient(135deg, var(--secondary), var(--leaf));
-            color: white;
-            text-align: center;
-            padding: 4rem 2rem;
-            margin: 2rem -2rem -2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .cta-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1000/400') center/cover;
-            opacity: 0.1;
-        }
-        
-        .cta-section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .cta-section p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: var(--secondary);
-            font-size: 1.2rem;
+        .logo-text {
+            font-size: 1.8rem;
             font-weight: bold;
-            padding: 1rem 2.5rem;
+            color: var(--primary);
+        }
+        
+        .logo-text span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            padding: 10px 25px;
             border-radius: 50px;
             text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .cta-button::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255,255,255,0.2);
-            transform: rotate(45deg);
-            transition: all 0.5s ease;
-        }
-        
-        .cta-button:hover::after {
-            left: 100%;
-        }
-        
-        .grape-animation {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 120px;
-            height: 120px;
-            z-index: 100;
+            display: inline-block;
             cursor: pointer;
         }
         
-        .grape-cluster {
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            padding: 160px 0 100px;
             position: relative;
-            width: 100%;
-            height: 100%;
-            transform-origin: top center;
-            animation: swing 3s ease-in-out infinite;
+            overflow: hidden;
         }
         
-        .grape {
+        .hero::after {
+            content: '';
             position: absolute;
-            background: var(--grape-dark);
-            border-radius: 50%;
-            box-shadow: inset -3px -3px 10px rgba(0,0,0,0.3), inset 3px 3px 10px rgba(255,255,255,0.2);
-            transition: transform 0.3s ease;
-        }
-        
-        .grape:nth-child(1) {
-            width: 40px;
-            height: 40px;
-            top: 20px;
-            left: 40px;
-        }
-        
-        .grape:nth-child(2) {
-            width: 35px;
-            height: 35px;
-            top: 30px;
-            left: 15px;
-        }
-        
-        .grape:nth-child(3) {
-            width: 38px;
-            height: 38px;
-            top: 30px;
-            left: 65px;
-        }
-        
-        .grape:nth-child(4) {
-            width: 32px;
-            height: 32px;
-            top: 60px;
-            left: 30px;
-        }
-        
-        .grape:nth-child(5) {
-            width: 36px;
-            height: 36px;
-            top: 60px;
-            left: 55px;
-        }
-        
-        .grape:nth-child(6) {
-            width: 30px;
-            height: 30px;
-            top: 85px;
-            left: 45px;
-        }
-        
-        .stem {
-            position: absolute;
-            width: 8px;
-            height: 35px;
-            background: var(--leaf);
-            top: -15px;
-            left: 56px;
-            border-radius: 4px;
-        }
-        
-        .leaf {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: var(--leaf);
-            top: -5px;
-            left: 65px;
-            border-radius: 0 15px 0 15px;
-            transform: rotate(45deg);
-            box-shadow: inset -2px -2px 5px rgba(0,0,0,0.2);
-            animation: leafWobble 4s ease-in-out infinite;
-        }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes zoomIn {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.1);
-            }
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes pulseText {
-            0% {
-                text-shadow: 0 0 10px rgba(255,255,255,0.1);
-            }
-            50% {
-                text-shadow: 0 0 20px rgba(255,255,255,0.4);
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(255,255,255,0.1);
-            }
-        }
-        
-        @keyframes swing {
-            0% {
-                transform: rotate(5deg);
-            }
-            50% {
-                transform: rotate(-5deg);
-            }
-            100% {
-                transform: rotate(5deg);
-            }
-        }
-        
-        @keyframes leafWobble {
-            0% {
-                transform: rotate(45deg) scale(1);
-            }
-            50% {
-                transform: rotate(35deg) scale(1.05);
-            }
-            100% {
-                transform: rotate(45deg) scale(1);
-            }
-        }
-        
-        .innovation-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--accent);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            z-index: 1;
-            transform: rotate(10deg);
-        }
-        
-        .scroll-indicator {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-        }
-        
-        .scroll-indicator svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-            opacity: 0.7;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) translateX(-50%);
-            }
-            40% {
-                transform: translateY(-20px) translateX(-50%);
-            }
-            60% {
-                transform: translateY(-10px) translateX(-50%);
-            }
-        }
-        
-        #scrollProgress {
-            position: fixed;
-            top: 0;
+            bottom: -50px;
             left: 0;
-            width: 0%;
-            height: 5px;
-            background: linear-gradient(to right, var(--grape-dark), var(--grape-light));
-            z-index: 1000;
-            transition: width 0.1s;
+            width: 100%;
+            height: 100px;
+            background-color: #f8f9fa;
+            clip-path: polygon(0 0, 100% 50%, 100% 100%, 0% 100%);
         }
         
-        .stats-counter {
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            width: 50%;
+            padding-right: 40px;
+        }
+        
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .hero-image {
+            width: 45%;
+            position: relative;
+        }
+        
+        .pill-animation {
+            position: absolute;
+            width: 120%;
+            height: auto;
+            right: -50px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .stats {
+            background-color: var(--white);
+            padding: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+            margin-top: -30px;
+            border-radius: 15px;
+        }
+        
+        .stats-container {
             display: flex;
             justify-content: space-around;
-            flex-wrap: wrap;
-            margin: 2rem 0;
             text-align: center;
         }
         
         .stat-item {
-            padding: 1.5rem;
-            flex: 1;
-            min-width: 200px;
+            padding: 20px;
         }
         
-        .stat-value {
-            font-size: 3rem;
+        .stat-number {
+            font-size: 2.5rem;
             font-weight: bold;
             color: var(--primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .stat-label {
-            font-size: 1.1rem;
+        .stat-desc {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .features {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             color: var(--dark);
         }
         
-        #rainEffect {
+        .section-title p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: rgba(0, 102, 204, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 30px;
+            color: var(--primary);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .how-it-works {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+        
+        .steps {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 90px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary);
+            z-index: 1;
+        }
+        
+        .step {
+            width: 22%;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        
+        .step:hover .step-number {
+            transform: scale(1.1);
+        }
+        
+        .step-content {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .step-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .dashboard {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .dashboard-preview {
+            position: relative;
+            max-width: 900px;
+            margin: 50px auto 0;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        .dashboard-preview img {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+        
+        .dashboard-features {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 999;
-            display: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
         }
         
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .differential-item {
+        .feature-point {
+            background-color: var(--accent);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-point::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+        
+        .feature-point:hover {
+            transform: scale(1.2);
+        }
+        
+        .feature-tooltip {
+            position: absolute;
+            background-color: var(--white);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            color: #333;
+            font-size: 0.9rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .feature-point:hover .feature-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .benefits {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+        
+        .benefits-container {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            margin-top: 50px;
+        }
+        
+        .benefits-image {
+            width: 40%;
+        }
+        
+        .benefits-image img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefits-list {
+            width: 60%;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .benefit-icon {
+            min-width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(0, 204, 153, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+        }
+        
+        .benefit-icon i {
+            font-size: 20px;
+            color: var(--accent);
+        }
+        
+        .benefit-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .benefit-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .testimonials {
+            padding: 100px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .testimonials-slider {
+            max-width: 800px;
+            margin: 50px auto 0;
+            position: relative;
+        }
+        
+        .testimonial-item {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 20px;
+            display: none;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-item.active {
+            display: block;
+        }
+        
+        .testimonial-content {
+            position: relative;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .testimonial-content::before {
+            content: '"';
+            font-size: 60px;
+            color: var(--primary);
+            opacity: 0.1;
+            position: absolute;
+            top: -30px;
+            left: -10px;
+        }
+        
+        .testimonial-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+        
+        .author-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .author-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-dot.active {
+            background-color: var(--primary);
+            transform: scale(1.2);
+        }
+        
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn-white {
+            background-color: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--white);
+        }
+        
+        .btn-white:hover {
+            background-color: transparent;
+            color: var(--white);
+        }
+        
+        .btn-transparent {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+        
+        .btn-transparent:hover {
+            background-color: var(--white);
+            color: var(--primary);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 70px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .footer-logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+        
+        .footer-logo-text span {
+            color: var(--accent);
+        }
+        
+        .footer-about p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #aaa;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .social-link i {
+            color: var(--white);
+            font-size: 18px;
+        }
+        
+        .footer-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links ul li a {
+            text-decoration: none;
+            color: #aaa;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links ul li a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        
+        .footer-contact p {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+        
+        .footer-contact p i {
+            margin-right: 15px;
+            color: var(--accent);
+            font-size: 18px;
+            margin-top: 5px;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            padding: 40px;
+            position: relative;
+            animation: modalIn 0.5s ease;
+        }
+        
+        @keyframes modalIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+        }
+        
+        .modal-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .modal-content p {
+            margin-bottom: 30px;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #333;
+            transition: border 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        /* Responsive Styles */
+        @media screen and (max-width: 992px) {
+            .hero-content {
                 flex-direction: column;
                 text-align: center;
             }
             
-            .differential-icon {
-                margin-right: 0;
-                margin-bottom: 1rem;
+            .hero-text {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 40px;
             }
             
-            .target-section h2, .differentials h2, .cta-section h2 {
-                font-size: 2rem;
+            .hero-image {
+                width: 70%;
+            }
+            
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .steps::before {
+                display: none;
+            }
+            
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .step {
+                width: 100%;
+                max-width: 400px;
+                margin-bottom: 40px;
+            }
+            
+            .benefits-container {
+                flex-direction: column;
+            }
+            
+            .benefits-image, .benefits-list {
+                width: 100%;
+            }
+            
+            .benefits-image {
+                margin-bottom: 40px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .header-content {
+                padding: 10px 0;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero {
+                padding: 120px 0 80px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                flex-wrap: wrap;
+            }
+            
+            .stat-item {
+                width: 50%;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div id="scrollProgress"></div>
-    <canvas id="rainEffect"></canvas>
-    
+    <!-- Header -->
     <header>
-        <div class="grape-bg"></div>
-        <div class="header-content">
-            <h1>Sistema Avançado de Contagem de Cachos de Uva</h1>
-            <p class="subtitle">Inovações e melhorias para transformar a vitivinicultura de precisão</p>
-        </div>
-        <div class="scroll-indicator">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
-            </svg>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-pills" style="font-size: 30px; color: #0066CC;"></i>
+                    <div class="logo-text">Pharma<span>Track</span>AI</div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#features">Recursos</a></li>
+                        <li><a href="#how-it-works">Como Funciona</a></li>
+                        <li><a href="#benefits">Benefícios</a></li>
+                        <li><a href="#testimonials">Depoimentos</a></li>
+                        
+                    </ul>
+                </nav>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
         </div>
     </header>
-    
-    <div class="main-container">
-        <section class="intro">
-            <h2>Expandindo os Horizontes da Viticultura de Precisão</h2>
-            <p>Nosso sistema de contagem de cachos de uva com OpenCV vai além da simples quantificação, integrando recursos avançados para uma solução completa de gestão da produção vinícola. Conheça as inovações que tornam este sistema uma ferramenta indispensável para o produtor moderno.</p>
-        </section>
-        
-        <div class="stats-counter">
-            <div class="stat-item">
-                <div class="stat-value" id="countAccuracy">97</div>
-                <div class="stat-label">% de Precisão na Contagem</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="countTime">80</div>
-                <div class="stat-label">% Menos Tempo na Colheita</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="countROI">35</div>
-                <div class="stat-label">% Aumento no ROI</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Rastreamento Inteligente de Medicamentos Controlados</h1>
+                    <p>O PharmaTrackAI revoluciona a gestão de medicamentos controlados com tecnologia de IA e IoT, garantindo segurança, conformidade e redução de perdas para hospitais, clínicas e farmácias.</p>
+                    
+                </div>
+                <div class="hero-image">
+                    <svg class="pill-animation" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Pill container with shadow -->
+                        <ellipse cx="250" cy="200" rx="200" ry="80" fill="#ffffff" filter="url(#shadow)"/>
+                        
+                        <!-- Pills -->
+                        <ellipse cx="150" cy="180" rx="40" ry="20" fill="#FF5252" stroke="#D32F2F" stroke-width="2"/>
+                        <ellipse cx="250" cy="200" rx="40" ry="20" fill="#4CAF50" stroke="#388E3C" stroke-width="2"/>
+                        <ellipse cx="350" cy="180" rx="40" ry="20" fill="#2196F3" stroke="#1976D2" stroke-width="2"/>
+                        
+                        <!-- Circuit board paths -->
+                        <path d="M130,180 L100,140 L80,140 L80,120 L120,120 L120,100" stroke="#00A3E0" stroke-width="2" fill="none"/>
+                        <path d="M170,180 L200,140 L280,140 L280,100" stroke="#00A3E0" stroke-width="2" fill="none"/>
+                        <path d="M250,220 L250,260 L200,260 L200,280" stroke="#00A3E0" stroke-width="2" fill="none"/>
+                        <path d="M350,200 L380,240 L420,240 L420,220" stroke="#00A3E0" stroke-width="2" fill="none"/>
+                        
+                        <!-- Connection points -->
+                        <circle cx="120" cy="100" r="5" fill="#00CC99"/>
+                        <circle cx="280" cy="100" r="5" fill="#00CC99"/>
+                        <circle cx="200" cy="280" r="5" fill="#00CC99"/>
+                        <circle cx="420" cy="220" r="5" fill="#00CC99"/>
+                        
+                        <!-- Digital waves animation -->
+                        <path class="wave" d="M50,50 Q75,30 100,50 Q125,70 150,50 Q175,30 200,50" stroke="#00CC99" stroke-width="2" fill="none">
+                            <animate attributeName="d" 
+                                values="M50,50 Q75,30 100,50 Q125,70 150,50 Q175,30 200,50;
+                                        M50,50 Q75,70 100,50 Q125,30 150,50 Q175,70 200,50;
+                                        M50,50 Q75,30 100,50 Q125,70 150,50 Q175,30 200,50" 
+                                dur="4s" 
+                                repeatCount="indefinite" />
+                        </path>
+                        
+                        <!-- Filter for shadow -->
+                        <defs>
+                            <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#000000" flood-opacity="0.3"/>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
             </div>
         </div>
-        
-        <section class="improvements">
-            <h2 style="text-align: center; margin-bottom: 2rem;">Melhorias Propostas</h2>
-            <div class="improvements-grid">
-                <div class="improvement-card" style="animation-delay: 0.1s;">
-                    <div class="card-header">
-                        <h3>Georreferenciamento e Mapeamento</h3>
-                        <div class="innovation-badge">Inovação</div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">99.8%</div>
+                    <div class="stat-desc">Precisão de Rastreamento</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-desc">Redução em Desvios</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-desc">Instituições Atendidas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30min</div>
+                    <div class="stat-desc">Tempo de Implementação</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Recursos Inovadores</h2>
+                <p>Nossa plataforma combina tecnologia de ponta com uma interface intuitiva para transformar o gerenciamento de medicamentos controlados.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-fingerprint"></i>
                     </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Marcação do local exato de cada contagem via GPS</li>
-                            <li>Geração de mapas de densidade de uvas na plantação</li>
-                            <li>Visualização em tempo real das áreas mais produtivas</li>
-                            <li>Integração com sistemas GIS para agricultura</li>
-                        </ul>
+                    <h3>Autenticação Biométrica</h3>
+                    <p>Controle de acesso seguro com reconhecimento biométrico para garantir que apenas pessoal autorizado possa acessar medicamentos controlados.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>IA Preditiva</h3>
+                    <p>Algoritmos avançados de inteligência artificial para prever padrões de uso, identificar anomalias e prevenir desvios antes que ocorram.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3>Rastreamento RFID</h3>
+                    <p>Tecnologia RFID integrada para monitoramento em tempo real de cada unidade de medicamento controlado em toda a cadeia de custódia.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Conformidade Automática</h3>
+                    <p>Geração automática de relatórios de conformidade para ANVISA e outros órgãos reguladores, eliminando trabalho manual.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Analytics Avançado</h3>
+                    <p>Dashboards personalizáveis com métricas detalhadas e insights acionáveis para otimizar processos e reduzir custos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Aplicativo Móvel</h3>
+                    <p>Acesso seguro via dispositivos móveis para monitoramento e gestão em qualquer lugar, a qualquer momento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>Como Funciona</h2>
+                <p>Um processo simples e eficiente para revolucionar o controle de medicamentos na sua instituição.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Instalação</h3>
+                        <p>Nossos especialistas instalam o sistema RFID e configuram o software de acordo com as necessidades da sua instituição.</p>
                     </div>
                 </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.2s;">
-                    <div class="card-header">
-                        <h3>Histórico e Análise Temporal</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Acompanhamento da produção ao longo do tempo</li>
-                            <li>Comparativo entre diferentes safras ou áreas</li>
-                            <li>Previsão de produção baseada em séries históricas</li>
-                            <li>Alertas de variações significativas na produtividade</li>
-                        </ul>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Integração</h3>
+                        <p>Integramos o PharmaTrackAI com seus sistemas existentes para um fluxo de trabalho contínuo.</p>
                     </div>
                 </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.3s;">
-                    <div class="card-header">
-                        <h3>Análise de Qualidade</h3>
-                        <div class="innovation-badge">Exclusivo</div>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Verificação visual do estado das uvas (coloração, tamanho)</li>
-                            <li>Alerta para uvas verdes, murchas ou doentes</li>
-                            <li>Estimativa de açúcar (Brix) baseada em análise visual</li>
-                            <li>Detecção precoce de doenças e pragas</li>
-                        </ul>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Treinamento</h3>
+                        <p>Treinamos sua equipe para maximizar os benefícios da plataforma com sessões práticas e material educativo.</p>
                     </div>
                 </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.4s;">
-                    <div class="card-header">
-                        <h3>Controle de Equipamentos</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Conexão e controle direto de drones</li>
-                            <li>Rota automatizada de escaneamento da plantação</li>
-                            <li>Streaming ao vivo em pontos estratégicos</li>
-                            <li>Integração com sistemas de irrigação automatizada</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.5s;">
-                    <div class="card-header">
-                        <h3>Modo Offline com Sincronização</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Funciona mesmo sem internet</li>
-                            <li>Sincronização automática quando online</li>
-                            <li>Armazenamento local seguro e eficiente</li>
-                            <li>Priorização inteligente de dados na sincronização</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.6s;">
-                    <div class="card-header">
-                        <h3>Exportação de Relatórios</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Geração de relatórios em PDF e Excel</li>
-                            <li>Integração com ERPs agrícolas</li>
-                            <li>Dashboards interativos personalizáveis</li>
-                            <li>Compartilhamento seguro via nuvem</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.7s;">
-                    <div class="card-header">
-                        <h3>Multiusuário e Permissões</h3>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Diferentes níveis de acesso por perfil</li>
-                            <li>Controle granular de permissões</li>
-                            <li>Rastreabilidade de ações por usuário</li>
-                            <li>Autenticação multi-fator para segurança</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.8s;">
-                    <div class="card-header">
-                        <h3>Aprendizado Contínuo</h3>
-                        <div class="innovation-badge">Novo</div>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>A IA melhora com cada uso (machine learning)</li>
-                            <li>Adaptação a diferentes variedades de uva</li>
-                            <li>Reconhecimento de padrões sazonais</li>
-                            <li>Integração de feedback do usuário para refinamento</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="improvement-card" style="animation-delay: 0.9s;">
-                    <div class="card-header">
-                        <h3>Previsão de Colheita</h3>
-                        <div class="innovation-badge">Exclusivo</div>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Estimativa precisa da data ideal de colheita</li>
-                            <li>Cálculo da mão de obra necessária</li>
-                            <li>Otimização logística baseada em produtividade</li>
-                            <li>Integração com previsão meteorológica</li>
-                        </ul>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Monitoramento</h3>
+                        <p>Comece a rastrear medicamentos em tempo real e obtenha insights valiosos para melhorar processos.</p>
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <section class="target-section">
-            <div class="target-bg"></div>
-            <div class="target-content">
-                <h2>Quem se Beneficia?</h2>
-                <p>Nosso sistema foi desenvolvido pensando nas necessidades específicas de todos os agentes da cadeia produtiva da viticultura.</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview Section -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dashboard Intuitivo</h2>
+                <p>Interface amigável que proporciona visibilidade completa e controle sobre todo o ciclo de vida dos medicamentos controlados.</p>
+            </div>
+            <div class="dashboard-preview">
+                <img src="https://store.ghairmulki.com/wp-content/uploads/2024/05/a.-dashboard.pngeu" alt="Dashboard Preview">
+                <div class="dashboard-features">
+                    <div class="feature-point" style="top: 30%; left: 20%;">
+                        <div class="feature-tooltip" style="left: 30px; top: -30px;">
+                            Monitoramento em tempo real do inventário com alertas automáticos
+                        </div>
+                    </div>
+                    <div class="feature-point" style="top: 50%; left: 60%;">
+                        <div class="feature-tooltip" style="right: 30px; top: -30px;">
+                            Análise detalhada de padrões de uso e distribuição
+                        </div>
+                    </div>
+                    <div class="feature-point" style="top: 70%; left: 40%;">
+                        <div class="feature-tooltip" style="left: 30px; bottom: 30px;">
+                            Relatórios automáticos de conformidade regulatória
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <div class="section-title">
+                <h2>Benefícios Comprovados</h2>
+                <p>Nossa solução oferece resultados tangíveis que melhoram a segurança, eficiência e conformidade da sua instituição.</p>
+            </div>
+            <div class="benefits-container">
+                <div class="benefits-image">
+                    <img src="https://thumbs.dreamstime.com/b/farm%C3%A1cia-com-doutor-e-enfermeira-no-contador-ilustra-o-do-projeto-de-personagem-banda-desenhada-da-drograria-144716751.jpg" alt="Benefits Illustration">
+                </div>
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Segurança Reforçada</h3>
+                            <p>Reduza significativamente o risco de desvios e uso indevido de medicamentos controlados com nosso sistema de rastreamento preciso e controles de acesso avançados.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Conformidade Garantida</h3>
+                            <p>Mantenha sua instituição em conformidade com todas as regulamentações da ANVISA e outros órgãos, evitando multas e penalidades.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Eficiência Operacional</h3>
+                            <p>Automatize processos manuais, reduza erros e libere tempo da sua equipe para focar no atendimento ao paciente.</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h3>Economia Significativa</h3>
+                            <p>Redução de perdas, otimização de estoque e melhor gestão de recursos resultam em economia comprovada de 15-30% nos custos relacionados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>O Que Nossos Clientes Dizem</h2>
+                <p>Veja como o PharmaTrackAI está transformando a gestão de medicamentos controlados em instituições de saúde por todo o Brasil.</p>
+            </div>
+            <div class="testimonials-slider">
+                <div class="testimonial-item active">
+                    <div class="testimonial-content">
+                        <p>"Após implementar o PharmaTrackAI, reduzimos em 92% os incidentes de desvio de medicamentos controlados e economizamos cerca de R$ 450 mil anualmente. A equipe de suporte é excepcional e a plataforma é extremamente intuitiva."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="/api/placeholder/60/60" alt="Dr. Ricardo Silva">
+                        </div>
+                        <div class="author-info">
+                            <h4>Dr. Ricardo Silva</h4>
+                            <p>Diretor Farmacêutico, Hospital São Lucas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item">
+                    <div class="testimonial-content">
+                        <p>"A capacidade de rastreamento em tempo real e os relatórios automáticos para a ANVISA eliminaram praticamente todo o trabalho manual que fazíamos antes. Agora podemos focar no que realmente importa: o cuidado com nossos pacientes."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="/api/placeholder/60/60" alt="Dra. Amanda Santos">
+                        </div>
+                        <div class="author-info">
+                            <h4>Dra. Amanda Santos</h4>
+                            <p>Coordenadora de Farmácia, Clínica Saúde Integral</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item">
+                    <div class="testimonial-content">
+                        <p>"Como rede de farmácias, enfrentávamos grandes desafios no controle de medicamentos entre nossas unidades. O PharmaTrackAI trouxe visibilidade total e aumentou nossa eficiência operacional em 67%."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="/api/placeholder/60/60" alt="Carlos Mendes">
+                        </div>
+                        <div class="author-info">
+                            <h4>Carlos Mendes</h4>
+                            <p>CEO, Rede PharmaPlus</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-nav">
+                    <div class="testimonial-dot active"></div>
+                    <div class="testimonial-dot"></div>
+                    <div class="testimonial-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Transforme a Gestão de Medicamentos na Sua Instituição</h2>
+            <p>Agende uma demonstração personalizada e descubra como o PharmaTrackAI pode melhorar a segurança, conformidade e eficiência na sua operação.</p>
+            <div class="cta-buttons">
+               
+                <a href="#" class="btn btn-transparent">Fale com um Especialista</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-pills" style="font-size: 30px; color: #00CC99;"></i>
+                        <div class="footer-logo-text">Pharma<span>Track</span>AI</div>
+                    </div>
+                    <p>Revolucionando o rastreamento e controle de medicamentos com tecnologia de ponta para um setor de saúde mais seguro e eficiente.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#features">Recursos</a></li>
+                        <li><a href="#how-it-works">Como Funciona</a></li>
+                        <li><a href="#benefits">Benefícios</a></li>
+                        <li><a href="#testimonials">Depoimentos</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Soluções</h3>
+                    <ul>
+                        <li><a href="#">Para Hospitais</a></li>
+                        <li><a href="#">Para Clínicas</a></li>
+                        <li><a href="#">Para Farmácias</a></li>
+                        <li><a href="#">Para Distribuidores</a></li>
+                        <li><a href="#">Integração de Sistemas</a></li>
+                        <li><a href="#">API & Desenvolvedores</a></li>
+                    </ul>
+                </div>
                 
-                <div class="target-list">
-                    <div class="target-item">Produtores de uva (pequeno a grande porte)</div>
-                    <div class="target-item">Vinícolas</div>
-                    <div class="target-item">Cooperativas agrícolas</div>
-                    <div class="target-item">Pesquisadores em agricultura de precisão</div>
-                    <div class="target-item">Empresas de consultoria agrícola</div>
-                    <div class="target-item">Associações de produtores</div>
-                    <div class="target-item">Instituições de ensino agrícola</div>
-                </div>
             </div>
-        </section>
-        
-        <section class="differentials">
-            <h2>Diferenciais do Sistema</h2>
-            
-            <div class="differential-item" style="animation-delay: 0.1s;">
-                <div class="differential-icon">🔄</div>
-                <div class="differential-content">
-                    <h3>Multidispositivo Real</h3>
-                    <p>Não é apenas um aplicativo — é uma plataforma conectada que funciona perfeitamente em smartphones, tablets, notebooks e estações de trabalho, mantendo a sincronização em tempo real.</p>
-                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PharmaTrackAI. Todos os direitos reservados.</p>
             </div>
-            
-            <div class="differential-item" style="animation-delay: 0.2s;">
-                <div class="differential-icon">📡</div>
-                <div class="differential-content">
-                    <h3>Integração com IoT Agrícola</h3>
-                    <p>Conexão com sensores de umidade, temperatura, luminosidade e nutrientes do solo, correlacionando dados ambientais com a produtividade para análises avançadas.</p>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal" id="demo-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Solicite uma Demonstração</h2>
+            <p>Preencha o formulário abaixo e um de nossos especialistas entrará em contato para agendar uma demonstração personalizada do PharmaTrackAI.</p>
+            <form id="demo-form">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" name="name" required>
                 </div>
-            </div>
-            
-            <div class="differential-item" style="animation-delay: 0.3s;">
-                <div class="differential-icon">📊</div>
-                <div class="differential-content">
-                    <h3>Flexível e Escalável</h3>
-                    <p>Do pequeno produtor ao grande exportador, o sistema se adapta às necessidades específicas de cada operação, crescendo junto com o seu negócio.</p>
+                <div class="form-group">
+                    <label for="institution">Instituição</label>
+                    <input type="text" id="institution" name="institution" required>
                 </div>
-            </div>
-            
-            <div class="differential-item" style="animation-delay: 0.4s;">
-                <div class="differential-icon">🧠</div>
-                <div class="differential-content">
-                    <h3>IA Especializada por Variedade</h3>
-                    <p>Algoritmos treinados especificamente para diferentes tipos de uva, reconhecendo as particularidades de cada variedade para maximizar a precisão da contagem e análise.</p>
+                <div class="form-group">
+                    <label for="position">Cargo</label>
+                    <input type="text" id="position" name="position" required>
                 </div>
-            </div>
-            
-            <div class="differential-item" style="animation-delay: 0.5s;">
-                <div class="differential-icon">💬</div>
-                <div class="differential-content">
-                    <h3>Assistente Virtual Agrícola</h3>
-                    <p>Recomendações personalizadas baseadas nas análises (irrigação, colheita, tratamento de pragas) com assistente de voz para consultas rápidas durante o trabalho no campo.</p>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-            </div>
-            
-            <div class="differential-item" style="animation-delay: 0.6s;">
-                <div class="differential-icon">🔒</div>
-                <div class="differential-content">
-                    <h3>Segurança de Dados Avançada</h3>
-                    <p>Proteção total das informações do produtor com criptografia de ponta a ponta, backups automatizados e conformidade com regulamentações de proteção de dados agrícolas.</p>
+                <div class="form-group">
+                    <label for="phone">Telefone</label>
+                    <input type="tel" id="phone" name="phone" required>
                 </div>
-            </div>
-        </section>
-        
-        
-    </div>
-    
-    <div class="grape-animation">
-        <div class="grape-cluster">
-            <div class="stem"></div>
-            <div class="leaf"></div>
-            <div class="grape"></div>
-            <div class="grape"></div>
-            <div class="grape"></div>
-            <div class="grape"></div>
-            <div class="grape"></div>
-            <div class="grape"></div>
+                <div class="form-group">
+                    <label for="institution-type">Tipo de Instituição</label>
+                    <select id="institution-type" name="institution-type" required>
+                        <option value="">Selecione...</option>
+                        <option value="hospital">Hospital</option>
+                        <option value="clinic">Clínica</option>
+                        <option value="pharmacy">Farmácia</option>
+                        <option value="distributor">Distribuidor</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensagem (Opcional)</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+            </form>
         </div>
     </div>
-    
+
     <script>
-        // Scroll progress bar
+        // Header scroll effect
         window.addEventListener('scroll', function() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("scrollProgress").style.width = scrolled + "%";
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
         
-        // Animation for stats counter
-        function animateValue(obj, start, end, duration) {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
-            };
-            window.requestAnimationFrame(step);
-        }
+        // Testimonials slider
+        const dots = document.querySelectorAll('.testimonial-dot');
+        const testimonials = document.querySelectorAll('.testimonial-item');
         
-        // Start animation when element is in viewport
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    animateValue(document.getElementById("countAccuracy"), 0, 97, 2000);
-                    animateValue(document.getElementById("countTime"), 0, 80, 2000);
-                    animateValue(document.getElementById("countROI"), 0, 35, 2000);
-                    observer.unobserve(entry.target);
-                }
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                // Remove active class from all dots and testimonials
+                dots.forEach(d => d.classList.remove('active'));
+                testimonials.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to current dot and testimonial
+                dot.classList.add('active');
+                testimonials[index].classList.add('active');
             });
         });
         
-        observer.observe(document.querySelector('.stats-counter'));
+        // Auto rotate testimonials
+        let currentTestimonial = 0;
         
-        // Grape rain effect
-        const grapeCluster = document.querySelector('.grape-animation');
-        grapeCluster.addEventListener('click', function() {
-            triggerGrapeRain();
-        });
-        
-        function triggerGrapeRain() {
-            const canvas = document.getElementById('rainEffect');
-            canvas.style.display = 'block';
-            const ctx = canvas.getContext('2d');
+        function rotateTestimonials() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
             
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            // Remove active class from all dots and testimonials
+            dots.forEach(d => d.classList.remove('active'));
+            testimonials.forEach(t => t.classList.remove('active'));
             
-            let grapes = [];
-            const colors = ['#8e44ad', '#9b59b6', '#a569bd', '#712b8f', '#5c1a73'];
-            
-            for (let i = 0; i < 100; i++) {
-                grapes.push({
-                    x: Math.random() * canvas.width,
-                    y: -20 - Math.random() * 100,
-                    size: 10 + Math.random() * 20,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    speed: 2 + Math.random() * 5,
-                    rotation: Math.random() * 360,
-                    rotationSpeed: -2 + Math.random() * 4
-                });
-            }
-            
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                let active = false;
-                
-                grapes.forEach(grape => {
-                    grape.y += grape.speed;
-                    grape.rotation += grape.rotationSpeed;
-                    
-                    ctx.save();
-                    ctx.translate(grape.x, grape.y);
-                    ctx.rotate(grape.rotation * Math.PI / 180);
-                    
-                    // Draw grape
-                    ctx.beginPath();
-                    ctx.arc(0, 0, grape.size, 0, Math.PI * 2);
-                    ctx.fillStyle = grape.color;
-                    ctx.fill();
-                    
-                    // Add highlight
-                    ctx.beginPath();
-                    ctx.arc(-grape.size/3, -grape.size/3, grape.size/3, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                    ctx.fill();
-                    
-                    ctx.restore();
-                    
-                    if (grape.y < canvas.height + 50) {
-                        active = true;
-                    }
-                });
-                
-                if (active) {
-                    requestAnimationFrame(animate);
-                } else {
-                    canvas.style.display = 'none';
-                }
-            }
-            
-            animate();
+            // Add active class to current dot and testimonial
+            dots[currentTestimonial].classList.add('active');
+            testimonials[currentTestimonial].classList.add('active');
         }
         
-        // Intersection Observer for card animations
-        const cardObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        setInterval(rotateTestimonials, 5000);
+        
+        // Demo modal
+        const demoButtons = document.querySelectorAll('.demo-btn');
+        const modal = document.getElementById('demo-modal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        demoButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                modal.style.display = 'flex';
             });
-        }, {
-            threshold: 0.1
         });
         
-        document.querySelectorAll('.improvement-card').forEach(card => {
-            cardObserver.observe(card);
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
         });
         
-        document.querySelectorAll('.differential-item').forEach(item => {
-            cardObserver.observe(item);
+        window.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Form submission
+        const demoForm = document.getElementById('demo-form');
+        
+        demoForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Obrigado por sua solicitação! Um especialista entrará em contato em breve.');
+            modal.style.display = 'none';
+            demoForm.reset();
         });
     </script>
 </body>
